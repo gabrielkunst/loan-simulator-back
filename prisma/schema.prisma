@@ -6,3 +6,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Loan {
+  id                   String   @id @default(uuid())
+  cpf                  String
+  uf                   String
+  birthdate            DateTime
+  loanAmount           Float    @map("loan_amount")
+  monthlyPayment       Float    @map("monthly_payment")
+  numberOfInstallments Int      @map("number_of_installments")
+  totalPayment         Float    @map("total_payment")
+  interestRate         Float    @map("interest_rate")
+  totalInterest        Float    @map("total_interest")
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  @@map("loans")
+}
