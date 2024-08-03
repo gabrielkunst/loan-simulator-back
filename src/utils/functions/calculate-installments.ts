@@ -1,12 +1,5 @@
+import { InstallmentProjection } from '@/types/installment-projection'
 import dayjs from 'dayjs'
-
-type InstallmentProjection = {
-  outstandingBalance: number
-  interest: number
-  adjustedBalance: number
-  installmentAmount: number
-  dueDate: string
-}
 
 type CalculateInstallmentsParams = {
   loanAmount: number

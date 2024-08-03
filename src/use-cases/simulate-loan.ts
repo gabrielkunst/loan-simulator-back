@@ -8,6 +8,7 @@ import { calculateInstallments } from '@/utils/functions/calculate-installments'
 import { InvalidLoanAmountError } from './_errors/invalid-loan-amount-error'
 import { InvalidMonthlyPaymentAmountError } from './_errors/invalid-monthly-payment-amount-error'
 import { InvalidInterestRateError } from './_errors/invalid-interest-rate-error'
+import { InstallmentProjection } from '@/types/installment-projection'
 
 type SimulateLoanUseCaseParams = {
   uf: string
@@ -22,6 +23,7 @@ type SimulateLoanUseCaseReturn = {
   numberOfInstallments: number
   totalInterest: number
   totalPayment: number
+  installments: InstallmentProjection[]
 }
 
 export class SimulateLoanUseCase {
@@ -71,6 +73,7 @@ export class SimulateLoanUseCase {
       numberOfInstallments: installments.length,
       totalInterest,
       totalPayment: loanAmount + totalInterest,
+      installments,
     }
   }
 }
