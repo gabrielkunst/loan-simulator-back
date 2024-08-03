@@ -9,6 +9,7 @@ import { InvalidLoanAmountError } from './_errors/invalid-loan-amount-error'
 import { InvalidMonthlyPaymentAmountError } from './_errors/invalid-monthly-payment-amount-error'
 import { InvalidInterestRateError } from './_errors/invalid-interest-rate-error'
 import { InstallmentProjection } from '@/types/installment-projection'
+import { BadRequestError } from './_errors/bad-request-error'
 
 type SimulateLoanUseCaseParams = {
   uf: string
@@ -32,48 +33,60 @@ export class SimulateLoanUseCase {
     loanAmount,
     monthlyPayment,
   }: SimulateLoanUseCaseParams): SimulateLoanUseCaseReturn {
-    if (loanAmount < MIN_LOAN_AMOUNT) {
-      throw new InvalidLoanAmountError(
-        `O valor do empréstimo deve ser de no mínimo ${formatCurrency(
-          MIN_LOAN_AMOUNT
-        )}`
-      )
-    }
+    try {
+      if (loanAmount < MIN_LOAN_AMOUNT) {
+        throw new InvalidLoanAmountError(
+          `O valor do empréstimo deve ser de no mínimo ${formatCurrency(
+            MIN_LOAN_AMOUNT
+          )}`
+        )
+      }
 
-    const minMonthlyPayment = loanAmount * MIN_MONTHLY_PAYMENT_RATE
+      const minMonthlyPayment = loanAmount * MIN_MONTHLY_PAYMENT_RATE
 
-    if (monthlyPayment < minMonthlyPayment) {
-      throw new InvalidMonthlyPaymentAmountError(
-        `O valor da parcela deve ser de no mínimo ${formatCurrency(
-          minMonthlyPayment
-        )}`
-      )
-    }
+      if (monthlyPayment < minMonthlyPayment) {
+        throw new InvalidMonthlyPaymentAmountError(
+          `O valor da parcela deve ser de no mínimo ${formatCurrency(
+            minMonthlyPayment
+          )}`
+        )
+      }
 
-    const interestRate = INTEREST_RATES[uf]
+      const interestRate = INTEREST_RATES[uf]
 
-    if (!interestRate) {
-      throw new InvalidInterestRateError(
-        `Não é possível simular empréstimos para o estado ${uf}. Os estados disponíveis são: ${Object.keys(
-          INTEREST_RATES
-        ).join(', ')}`
-      )
-    }
+      if (!interestRate) {
+        throw new InvalidInterestRateError(
+          `Não é possível simular empréstimos para o estado ${uf}. Os estados disponíveis são: ${Object.keys(
+            INTEREST_RATES
+          ).join(', ')}`
+        )
+      }
 
-    const { installments, totalInterest } = calculateInstallments({
-      interestRate,
-      loanAmount,
-      monthlyPayment,
-    })
+      const { installments, totalInterest } = calculateInstallments({
+        interestRate,
+        loanAmount,
+        monthlyPayment,
+      })
 
-    return {
-      requestedAmount: loanAmount,
-      interestRate,
-      monthlyPayment,
-      numberOfInstallments: installments.length,
-      totalInterest,
-      totalPayment: loanAmount + totalInterest,
-      installments,
+      return {
+        requestedAmount: loanAmount,
+        interestRate,
+        monthlyPayment,
+        numberOfInstallments: installments.length,
+        totalInterest,
+        totalPayment: loanAmount + totalInterest,
+        installments,
+      }
+    } catch (error) {
+      if (
+        error instanceof InvalidLoanAmountError ||
+        error instanceof InvalidMonthlyPaymentAmountError ||
+        error instanceof InvalidInterestRateError
+      ) {
+        throw new BadRequestError(error.message)
+      }
+
+      throw error
     }
   }
 }
