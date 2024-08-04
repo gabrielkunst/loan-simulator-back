@@ -11,8 +11,8 @@ export async function simulateLoanRoute(app: FastifyInstance) {
         tags: ['simulations'],
         summary: 'Realiza uma simulação de empréstimo',
         body: z.object({
-          loanAmount: z.number(),
-          monthlyPayment: z.number(),
+          loanAmount: z.coerce.number(),
+          monthlyPayment: z.coerce.number(),
           uf: z.string(),
         }),
         response: {

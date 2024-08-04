@@ -13,8 +13,8 @@ export async function createLoanRoute(app: FastifyInstance) {
         tags: ['loans'],
         summary: 'Cria um novo empréstimo',
         body: z.object({
-          loanAmount: z.number(),
-          monthlyPayment: z.number(),
+          loanAmount: z.coerce.number(),
+          monthlyPayment: z.coerce.number(),
           uf: z.string(),
           cpf: z.string(),
           birthdate: z.string(),
@@ -22,6 +22,7 @@ export async function createLoanRoute(app: FastifyInstance) {
         response: {
           201: z.object({
             loanId: z.string(),
+            message: z.string(),
           }),
         },
       },
@@ -53,6 +54,7 @@ export async function createLoanRoute(app: FastifyInstance) {
 
       return res.status(201).send({
         loanId: loan.id,
+        message: 'Empréstimo criado com sucesso',
       })
     }
   )
