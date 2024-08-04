@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { SimulateLoanUseCase } from './simulate-loan'
 import { INTEREST_RATES } from '@/utils/contants'
-import { BadRequestError } from './_errors/bad-request-error'
+import { CustomError } from './_errors/custom-error'
 
 type CreateSutReturn = {
   sut: SimulateLoanUseCase
@@ -27,7 +27,7 @@ describe('Simulate Loan Use Case', () => {
       monthlyPayment: 2_000,
     }
 
-    expect(() => sut.execute(simulationData)).toThrowError(BadRequestError)
+    expect(() => sut.execute(simulationData)).toThrowError(CustomError)
   })
 
   it('should throw an error if the monthly payment is less than the minimum', () => {
@@ -41,7 +41,7 @@ describe('Simulate Loan Use Case', () => {
       monthlyPayment: 499,
     }
 
-    expect(() => sut.execute(simulationData)).toThrowError(BadRequestError)
+    expect(() => sut.execute(simulationData)).toThrowError(CustomError)
   })
 
   it("should throw an error if the interest rate for the provided 'uf' is not available", () => {
@@ -55,7 +55,7 @@ describe('Simulate Loan Use Case', () => {
       monthlyPayment: 2_000,
     }
 
-    expect(() => sut.execute(simulationData)).toThrowError(BadRequestError)
+    expect(() => sut.execute(simulationData)).toThrowError(CustomError)
   })
 
   it('should be able to simulate a loan', () => {
