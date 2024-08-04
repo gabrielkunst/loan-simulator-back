@@ -12,11 +12,15 @@ export class PrismaLoanRepository implements LoanRepository {
     })
   }
 
-  async getLoan(loanId: string) {
+  async getLoanById(id: string) {
     return await prisma.loan.findUnique({
       where: {
-        id: loanId,
+        id,
       },
     })
+  }
+
+  async getLoans() {
+    return await prisma.loan.findMany()
   }
 }

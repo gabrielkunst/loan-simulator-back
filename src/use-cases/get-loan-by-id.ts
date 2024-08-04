@@ -1,18 +1,18 @@
 import { LoanRepository } from '@/repositories/loan-repository'
 import { ResourceNotFoundError } from './_errors/resource-not-found-error'
 import { Loan } from '@prisma/client'
-import { BadRequestError } from './_errors/bad-request-error'
+import { CustomError } from './_errors/custom-error'
 
 type GetLoanUseCaseReturn = {
   loan: Loan
 }
 
-export class GetLoanUseCase {
+export class GetLoanByIdUseCase {
   constructor(private readonly loanRepository: LoanRepository) {}
 
   async execute(loanId: string): Promise<GetLoanUseCaseReturn> {
     try {
-      const loan = await this.loanRepository.getLoan(loanId)
+      const loan = await this.loanRepository.getLoanById(loanId)
 
       if (!loan) {
         throw new ResourceNotFoundError('Empréstimo não encontrado')
@@ -23,7 +23,7 @@ export class GetLoanUseCase {
       }
     } catch (error) {
       if (error instanceof ResourceNotFoundError) {
-        throw new BadRequestError(error.message)
+        throw new CustomError(error.message)
       }
 
       throw error

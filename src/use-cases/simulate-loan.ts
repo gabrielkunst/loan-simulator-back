@@ -1,15 +1,11 @@
-import {
-  INTEREST_RATES,
-  MIN_LOAN_AMOUNT,
-  MIN_MONTHLY_PAYMENT_RATE,
-} from '@/utils/contants'
-import { formatCurrency } from '@/utils/functions/format-currency'
+import { INTEREST_RATES } from '@/utils/contants'
 import { calculateInstallments } from '@/utils/functions/calculate-installments'
 import { InvalidLoanAmountError } from './_errors/invalid-loan-amount-error'
 import { InvalidMonthlyPaymentAmountError } from './_errors/invalid-monthly-payment-amount-error'
 import { InvalidInterestRateError } from './_errors/invalid-interest-rate-error'
 import { InstallmentProjection } from '@/types/installment-projection'
-import { BadRequestError } from './_errors/bad-request-error'
+import { CustomError } from './_errors/custom-error'
+import { LoanValidator } from '@/utils/loan-validator'
 
 type SimulateLoanUseCaseParams = {
   uf: string
@@ -34,33 +30,11 @@ export class SimulateLoanUseCase {
     monthlyPayment,
   }: SimulateLoanUseCaseParams): SimulateLoanUseCaseReturn {
     try {
-      if (loanAmount < MIN_LOAN_AMOUNT) {
-        throw new InvalidLoanAmountError(
-          `O valor do empréstimo deve ser de no mínimo ${formatCurrency(
-            MIN_LOAN_AMOUNT
-          )}`
-        )
-      }
-
-      const minMonthlyPayment = loanAmount * MIN_MONTHLY_PAYMENT_RATE
-
-      if (monthlyPayment < minMonthlyPayment) {
-        throw new InvalidMonthlyPaymentAmountError(
-          `O valor da parcela deve ser de no mínimo ${formatCurrency(
-            minMonthlyPayment
-          )}`
-        )
-      }
+      LoanValidator.validateLoanAmount(loanAmount)
+      LoanValidator.validateMonthlyPayment(loanAmount, monthlyPayment)
 
       const interestRate = INTEREST_RATES[uf]
-
-      if (!interestRate) {
-        throw new InvalidInterestRateError(
-          `Não é possível simular empréstimos para o estado ${uf}. Os estados disponíveis são: ${Object.keys(
-            INTEREST_RATES
-          ).join(', ')}`
-        )
-      }
+      LoanValidator.validateInterestRate(uf, interestRate)
 
       const { installments, totalInterest } = calculateInstallments({
         interestRate,
@@ -83,7 +57,7 @@ export class SimulateLoanUseCase {
         error instanceof InvalidMonthlyPaymentAmountError ||
         error instanceof InvalidInterestRateError
       ) {
-        throw new BadRequestError(error.message)
+        throw new CustomError(error.message)
       }
 
       throw error

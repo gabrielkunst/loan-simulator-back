@@ -1,10 +1,10 @@
 import { PrismaLoanRepository } from '@/repositories/prisma/prisma-loan-repository'
-import { GetLoanUseCase } from '@/use-cases/get-loan'
+import { GetLoanByIdUseCase } from '@/use-cases/get-loan-by-id'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-export async function getLoanRoute(app: FastifyInstance) {
+export async function getLoanByIdRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     '/loans/:loanId',
     {
@@ -37,9 +37,9 @@ export async function getLoanRoute(app: FastifyInstance) {
       const { loanId } = req.params
 
       const loanRepository = new PrismaLoanRepository()
-      const getLoanUseCase = new GetLoanUseCase(loanRepository)
+      const getLoanByIdUseCase = new GetLoanByIdUseCase(loanRepository)
 
-      const { loan } = await getLoanUseCase.execute(loanId)
+      const { loan } = await getLoanByIdUseCase.execute(loanId)
 
       return res.status(200).send({
         loan,

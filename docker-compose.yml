@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: loan-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3333:3333'
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: loan-simulator-postgres
+    image: bitnami/postgresql:latest
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

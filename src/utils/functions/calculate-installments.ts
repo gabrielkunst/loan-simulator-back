@@ -1,5 +1,5 @@
 import { InstallmentProjection } from '@/types/installment-projection'
-import { BadRequestError } from '@/use-cases/_errors/bad-request-error'
+import { CustomError } from '@/use-cases/_errors/custom-error'
 import dayjs from 'dayjs'
 
 type CalculateInstallmentsParams = {
@@ -47,7 +47,7 @@ export function calculateInstallments({
     const newBalance = adjustedBalance - monthlyPayment
 
     if (newBalance === outstandingBalance) {
-      throw new BadRequestError(
+      throw new CustomError(
         'O valor da parcela é insuficiente para amortizar o saldo devedor'
       )
     }

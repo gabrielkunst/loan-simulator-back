@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
-import { BadRequestError } from './use-cases/_errors/bad-request-error'
+import { CustomError } from './use-cases/_errors/custom-error'
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
@@ -12,7 +12,7 @@ export const errorHandler: FastifyErrorHandler = (error, req, res) => {
     })
   }
 
-  if (error instanceof BadRequestError) {
+  if (error instanceof CustomError) {
     return res.status(400).send({
       message: error.message,
     })

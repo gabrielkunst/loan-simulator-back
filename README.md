@@ -1,6 +1,6 @@
 # Simulador de Empréstimo API
 
-Este projeto é a API backend para o Simulador de Empréstimo. Foi criado com Fastify, testado com Vitest e Supertest, e documentado com Swagger. Utiliza PostgreSQL para o banco de dados, configurado e executado via Docker.
+Este projeto é a API backend para o Simulador de Empréstimo. Foi criado com Fastify, testado com Vitest, e documentado com Swagger. Utiliza PostgreSQL para o banco de dados, configurado e executado via Docker.
 
 ## Funcionalidades
 
