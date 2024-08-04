@@ -36,7 +36,9 @@ app.register(fastifyCors, {
   allowedHeaders: ['Content-Type', 'Authorization'],
 })
 
-app.register(appRoutes)
+app.register(appRoutes, {
+  prefix: '/api',
+})
 
 app
   .listen({
