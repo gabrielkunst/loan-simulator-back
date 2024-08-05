@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "fb01042b-4bf1-4ea0-946e-ffa7178a623d",
+		"name": "Simulador de Empréstimos",
+		"description": "API para simulação e criação de empréstimos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27776140"
+	},
+	"item": [
+		{
+			"name": "Get Simulation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"loanAmount\": 60000,\n  \"monthlyPayment\": 15000,\n  \"uf\": \"MG\",\n  \"cpf\": \"647.865.880-59\",\n  \"birthdate\": \"1986-10-10\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://3.15.193.207/api/loans/simulation",
+					"protocol": "http",
+					"host": [
+						"3",
+						"15",
+						"193",
+						"207"
+					],
+					"path": [
+						"api",
+						"loans",
+						"simulation"
+					]
+				},
+				"description": "Realiza uma simulação de empréstimo"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Loan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"loanAmount\": 60000,\n  \"monthlyPayment\": 1500,\n  \"uf\": \"MG\",\n  \"cpf\": \"647.865.880-59\",\n  \"birthdate\": \"1986-10-10\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://3.15.193.207/api/loans",
+					"protocol": "http",
+					"host": [
+						"3",
+						"15",
+						"193",
+						"207"
+					],
+					"path": [
+						"api",
+						"loans"
+					]
+				},
+				"description": "Cria um novo empréstimo"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Loan By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://3.15.193.207/api/loans/c2405bf0-5c68-405e-a648-eb38ea384c99",
+					"protocol": "http",
+					"host": [
+						"3",
+						"15",
+						"193",
+						"207"
+					],
+					"path": [
+						"api",
+						"loans",
+						"c2405bf0-5c68-405e-a648-eb38ea384c99"
+					]
+				},
+				"description": "Obtém um empréstimo pelo ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Loans",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://3.15.193.207/api/loans",
+					"protocol": "http",
+					"host": [
+						"3",
+						"15",
+						"193",
+						"207"
+					],
+					"path": [
+						"api",
+						"loans"
+					]
+				},
+				"description": "Obtém todos os empréstimos"
+			},
+			"response": []
+		}
+	]
+}
